@@ -64,7 +64,7 @@ class Base():
         android.touch(self.cancel)
     def connect(self,p1,p2):
         def send(method,pos):
-            android.maxtouch.safe_send(' '.join((method,'0',*[str(i)for i in android.maxtouch.transform_xy(*pos)],'50\nc\n')))
+            android.touch_proxy.handle(' '.join((method,'0',*[str(i)for i in android.touch_proxy.transform_xy(*pos)],'50\nc\n')))
         p1=android._touch_point_by_orientation(self.key[p1])
         p2=android._touch_point_by_orientation(self.key[p2])
         time.sleep(.01)
@@ -80,7 +80,7 @@ class Base():
         time.sleep(.1)
         send('m',p2)
         time.sleep(.1)
-        android.maxtouch.safe_send('u 0\nc\n')
+        android.touch_proxy.handle('u 0\nc\n')
         time.sleep(.05)
     def isThereAnEdge(self,p1,p2):
         if (p1,p2)in self.edgeCache:
@@ -153,7 +153,6 @@ if __name__=='__main__':
         print('\n'.join('\t'.join(str(j)for j in i)for i in enumerate(devices)))
         serial=devices[int(input())]
     android=Android(serial,ori_method=ORI_METHOD.ADB,touch_method=TOUCH_METHOD.MAXTOUCH)
-    android.maxtouch.install_and_setup()
     while True:
         try:
             print('size:',end='')
